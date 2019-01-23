@@ -176,34 +176,31 @@ public class InstrumentMaintenance extends javax.swing.JFrame{
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(typeLabel)
-                                    .addComponent(sNumLabel)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addGap(29, 29, 29)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(typeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(subTypeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(modelField, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(makeField)
-                                    .addComponent(serialNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(saveRecordButton)
-                                .addGap(27, 27, 27)
-                                .addComponent(deleteButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(cancelButton)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addComponent(typeLabel)
+                            .addComponent(sNumLabel)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(typeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(subTypeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(modelField, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(makeField)
+                            .addComponent(serialNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(saveRecordButton)
+                        .addGap(27, 27, 27)
+                        .addComponent(deleteButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(cancelButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(46, 46, 46)
-                        .addComponent(personnelBox, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(personnelBox, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
@@ -269,18 +266,18 @@ public class InstrumentMaintenance extends javax.swing.JFrame{
         if(i.getInstrumentId() != 0){
             System.out.println("Updating");
             if(i.update()){
-                JOptionPane.showMessageDialog(null, "Record saved");
+                JOptionPane.showMessageDialog(this, "Record saved");
                 super.dispose();
             }else{
-                JOptionPane.showMessageDialog(null, "Record could not be saved.\n"
+                JOptionPane.showMessageDialog(this, "Record could not be saved.\n"
                         + "Check error log for details.", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         }else{
             if(i.add()){
-                JOptionPane.showMessageDialog(null, "Record created");
+                JOptionPane.showMessageDialog(this, "Record created");
                 super.dispose();
             }else{
-                JOptionPane.showMessageDialog(null, "Record could not be created.\n"
+                JOptionPane.showMessageDialog(this, "Record could not be created.\n"
                         + "Make sure this is not a duplicate.", "ERROR", JOptionPane.ERROR_MESSAGE);
             }        
         }
@@ -301,9 +298,9 @@ public class InstrumentMaintenance extends javax.swing.JFrame{
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         if(i.delete()){
-            JOptionPane.showMessageDialog(null, "Record deleted");
+            JOptionPane.showMessageDialog(this, "Record deleted");
         }else{
-            JOptionPane.showMessageDialog(null, "Record could not be deleted.\n "
+            JOptionPane.showMessageDialog(this, "Record could not be deleted.\n "
                     + "Check error log for details.");
         }
         super.dispose();

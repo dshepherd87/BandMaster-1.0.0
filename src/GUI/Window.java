@@ -437,7 +437,7 @@ public class Window extends javax.swing.JFrame {
             InstrumentMaintenance i = new InstrumentMaintenance(instrument);
             i.setVisible(true);
         }catch(NullPointerException e){
-            JOptionPane.showMessageDialog(null, "No instrument record selected");
+            JOptionPane.showMessageDialog(this, "No instrument record selected");
         }
                      
     }//GEN-LAST:event_viewButtonActionPerformed
