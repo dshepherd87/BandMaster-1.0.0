@@ -9,7 +9,7 @@ import java.awt.Component;
 import java.util.List;
 import domain.*;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 /**
  *
@@ -68,8 +68,8 @@ public class Window extends javax.swing.JFrame {
         searchPersButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         personnelListField = new javax.swing.JList<>();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        createPersonnelButton = new javax.swing.JButton();
+        viewPersonnelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -115,6 +115,22 @@ public class Window extends javax.swing.JFrame {
 
         resultList.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         resultList.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        resultList.setCellRenderer(new DefaultListCellRenderer(){
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if(value instanceof Instrument){
+                    Instrument i = (Instrument) value;
+                    String display = i.getSubType().getDescription() + "     "
+                    + i.getType().getDescription() + "     "
+                    + i.getMake() + "     "
+                    + i.getModel() + "     "
+                    + i.getSerialNumber();
+                    setText(display);
+                }
+                return this;
+            }
+        });
         resultList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
         jScrollPane1.setViewportView(resultList);
 
@@ -174,20 +190,19 @@ public class Window extends javax.swing.JFrame {
                                     .addComponent(typeLabel))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(sNumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(sNumLabel))
+                                    .addComponent(jLabel3)
+                                    .addComponent(makeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(modelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(makeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(modelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(sNumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(searchInstButton))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(125, 125, 125)
-                                        .addComponent(jLabel4))))
+                                    .addComponent(sNumLabel)))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -199,23 +214,23 @@ public class Window extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(20, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(subTypeLabel)
                     .addComponent(typeLabel)
-                    .addComponent(sNumLabel)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(sNumLabel))
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(subTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(typeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sNumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(makeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchInstButton))
+                    .addComponent(searchInstButton)
+                    .addComponent(sNumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -224,7 +239,7 @@ public class Window extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createButton)
                     .addComponent(viewButton))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Instrument Record Lookup", jPanel1);
@@ -265,19 +280,19 @@ public class Window extends javax.swing.JFrame {
         personnelListField.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jScrollPane2.setViewportView(personnelListField);
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jButton3.setText("Create New Personnel Record");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        createPersonnelButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        createPersonnelButton.setText("Create New Personnel Record");
+        createPersonnelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                createPersonnelButtonActionPerformed(evt);
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jButton4.setText("View Personnel Record");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        viewPersonnelButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        viewPersonnelButton.setText("View Personnel Record");
+        viewPersonnelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                viewPersonnelButtonActionPerformed(evt);
             }
         });
 
@@ -292,9 +307,9 @@ public class Window extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButton3)
+                                .addComponent(createPersonnelButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(viewPersonnelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(fNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -342,8 +357,8 @@ public class Window extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(createPersonnelButton)
+                    .addComponent(viewPersonnelButton))
                 .addContainerGap(41, Short.MAX_VALUE))
         );
 
@@ -403,7 +418,7 @@ public class Window extends javax.swing.JFrame {
             modelTextField.getText(), 0);
         resultList.setListData(instruments);
         if(instruments.length == 0)
-            JOptionPane.showMessageDialog(null, "No records found");
+            JOptionPane.showMessageDialog(this, "No records found");
     }//GEN-LAST:event_searchInstButtonActionPerformed
 
     private DefaultComboBoxModel buildSubTypeModel(){     
@@ -452,19 +467,19 @@ public class Window extends javax.swing.JFrame {
         Personnel[] resultSet = Personnel.getArray(p);
         personnelListField.setListData(resultSet);
         if(resultSet.length == 0)
-            JOptionPane.showMessageDialog(null, "No records found");
+            JOptionPane.showMessageDialog(this, "No records found");
     }//GEN-LAST:event_searchPersButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void createPersonnelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createPersonnelButtonActionPerformed
         PersonnelMaintenance p = new PersonnelMaintenance();
         p.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_createPersonnelButtonActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void viewPersonnelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPersonnelButtonActionPerformed
         Personnel person = (Personnel)personnelListField.getSelectedValue();
         PersonnelMaintenance p = new PersonnelMaintenance(person);
         p.setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_viewPersonnelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -503,12 +518,11 @@ public class Window extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createButton;
+    private javax.swing.JButton createPersonnelButton;
     private javax.swing.JTextField fNameField;
     private javax.swing.JLabel fNameLabel;
     private javax.swing.JTextField idField;
     private javax.swing.JLabel idLabel;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -539,5 +553,6 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JComboBox<InstrumentType> typeBox;
     private javax.swing.JLabel typeLabel;
     private javax.swing.JButton viewButton;
+    private javax.swing.JButton viewPersonnelButton;
     // End of variables declaration//GEN-END:variables
 }

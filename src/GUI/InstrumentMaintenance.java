@@ -8,6 +8,9 @@ package GUI;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import domain.*;
+import java.awt.Component;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 /**
@@ -72,7 +75,7 @@ public class InstrumentMaintenance extends javax.swing.JFrame{
         subTypeBox = new javax.swing.JComboBox<InstrumentSubType>(InstrumentSubType.listToArray());
         typeBox = new javax.swing.JComboBox<InstrumentType>(InstrumentType.listToArray());
         saveRecordButton = new javax.swing.JButton();
-        personnelBox = new javax.swing.JComboBox<>();
+        personnelBox = new javax.swing.JComboBox<Personnel>();
         cancelButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
 
@@ -147,6 +150,17 @@ public class InstrumentMaintenance extends javax.swing.JFrame{
         });
 
         personnelBox.setModel(buildPersonnelModel());
+        personnelBox.setRenderer(new DefaultListCellRenderer(){
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if(value instanceof Personnel){
+                    Personnel person = (Personnel) value;
+                    setText(person.toString());
+                    return this;
+                }
+                return this;}
+        });
         personnelBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 personnelBoxActionPerformed(evt);
