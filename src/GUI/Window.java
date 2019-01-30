@@ -6,7 +6,8 @@
 package GUI;
 
 import java.awt.Component;
-import java.util.List;
+import Utilities.StringUtil;
+import java.util.*;
 import domain.*;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.*;
@@ -121,12 +122,15 @@ public class Window extends javax.swing.JFrame {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if(value instanceof Instrument){
                     Instrument i = (Instrument) value;
-                    String display = i.getSubType().getDescription() + "     "
-                    + i.getType().getDescription() + "     "
-                    + i.getMake() + "     "
-                    + i.getModel() + "     "
-                    + i.getSerialNumber();
-                    setText(display);
+                    StringBuilder display = new StringBuilder();
+                    display.append("  ");
+                    display.append(pad(i.getSubType().getDescription(), 15));
+                    display.append(pad(i.getType().getDescription(), 18));
+                    display.append(pad(i.getMake(), 25));
+                    display.append(pad(i.getModel(), 30));
+                    display.append(pad(i.getSerialNumber(), 15));
+                    String s = display.toString();
+                    setText(s);
                 }
                 return this;
             }
@@ -434,6 +438,19 @@ public class Window extends javax.swing.JFrame {
         Object[] b = a.toArray();
         return new DefaultComboBoxModel(b);
     }
+    static String pad(String s, int length){
+        if(s.length() < length){
+            StringBuilder sb = new StringBuilder(s);
+            while(sb.length() < length){
+                sb.append(" ");
+            }
+            return sb.toString();
+        }else{
+            return s.substring(0, length);
+        }
+    }
+    
+    String s = pad("grodd", 20);
     private void modelTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modelTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_modelTextFieldActionPerformed
