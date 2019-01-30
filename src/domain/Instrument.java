@@ -106,6 +106,13 @@ public class Instrument
         return instruments.getAll();        
     }
     
+    public static List<Instrument> getList(Instrument i){
+        InstrumentDAO instruments = new InstrumentDAO();
+        return instruments.getByValue(i.getSubType().getSubTypeId(), 
+                i.getType().getTypeId(), i.getSerialNumber(), 
+                i.getMake(), i.getModel(), i.getPersonnelId());
+    }
+    
     public static List<Instrument> getList(int subTypeId, int typeId, 
             String serialNumber, String make, String model, int personnelId){
         InstrumentDAO instruments = new InstrumentDAO();
