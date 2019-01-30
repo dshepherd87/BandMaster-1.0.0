@@ -222,18 +222,18 @@ public class PersonnelMaintenance extends javax.swing.JFrame{
         
         if(p.getPersonnelId() == 0){
             if(p.add()){
-                JOptionPane.showMessageDialog(null, "Record created");
+                JOptionPane.showMessageDialog(this, "Record created");
                 super.dispose();
             }else{
-                JOptionPane.showMessageDialog(null, "Record could not be created.\n"
+                JOptionPane.showMessageDialog(this, "Record could not be created.\n"
                         + "Check error log for details.", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         }else{
             if(p.update()){
-                JOptionPane.showMessageDialog(null, "Record updated");
+                JOptionPane.showMessageDialog(this, "Record updated");
                 super.dispose();
             }else{
-                JOptionPane.showMessageDialog(null, "Record could not be updated.\n"
+                JOptionPane.showMessageDialog(this, "Record could not be updated.\n"
                         + "Check error log for details.", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         }

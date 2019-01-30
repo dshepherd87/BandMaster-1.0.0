@@ -5,17 +5,17 @@
  */
 package GUI;
 
-import java.awt.Component;
-import java.util.List;
+import java.util.*;
 import domain.*;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 /**
  *
  * @author David Shepherd
  */
 public class Window extends javax.swing.JFrame {
+    InstrumentTableModel iModel;
 
     /**
      * Creates new form Window
@@ -45,13 +45,13 @@ public class Window extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         modelTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        resultList = new javax.swing.JList<Instrument>();
         searchInstButton = new javax.swing.JButton();
         viewButton = new javax.swing.JButton();
         createButton = new javax.swing.JButton();
         subTypeBox = new javax.swing.JComboBox<InstrumentSubType>();
         typeBox = new javax.swing.JComboBox<InstrumentType>(InstrumentType.listToArray());
+        jScrollPane3 = new javax.swing.JScrollPane();
+        resultsTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -68,8 +68,8 @@ public class Window extends javax.swing.JFrame {
         searchPersButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         personnelListField = new javax.swing.JList<>();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        createPersonnelButton = new javax.swing.JButton();
+        viewPersonnelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -113,11 +113,6 @@ public class Window extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel4.setText("Model");
 
-        resultList.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        resultList.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        resultList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
-        jScrollPane1.setViewportView(resultList);
-
         searchInstButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         searchInstButton.setText("Search");
         searchInstButton.addActionListener(new java.awt.event.ActionListener() {
@@ -151,6 +146,9 @@ public class Window extends javax.swing.JFrame {
 
         typeBox.setModel(buildTypeModel());
 
+        resultsTable.setModel(new InstrumentTableModel());
+        jScrollPane3.setViewportView(resultsTable);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -164,67 +162,66 @@ public class Window extends javax.swing.JFrame {
                         .addGap(64, 64, 64)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(subTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(subTypeLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(typeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(typeLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(sNumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(sNumLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(makeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(modelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(searchInstButton))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(125, 125, 125)
-                                        .addComponent(jLabel4))))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                     .addComponent(createButton)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(viewButton))))))
+                                    .addComponent(viewButton))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(subTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(subTypeLabel))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(typeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(typeLabel))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel3)
+                                        .addComponent(makeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(modelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(sNumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(searchInstButton))
+                                        .addComponent(sNumLabel)))))))
                 .addContainerGap(86, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(subTypeLabel)
                     .addComponent(typeLabel)
-                    .addComponent(sNumLabel)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(sNumLabel))
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(subTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(typeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sNumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(makeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchInstButton))
+                    .addComponent(searchInstButton)
+                    .addComponent(sNumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createButton)
                     .addComponent(viewButton))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Instrument Record Lookup", jPanel1);
@@ -265,19 +262,19 @@ public class Window extends javax.swing.JFrame {
         personnelListField.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jScrollPane2.setViewportView(personnelListField);
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jButton3.setText("Create New Personnel Record");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        createPersonnelButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        createPersonnelButton.setText("Create New Personnel Record");
+        createPersonnelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                createPersonnelButtonActionPerformed(evt);
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jButton4.setText("View Personnel Record");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        viewPersonnelButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        viewPersonnelButton.setText("View Personnel Record");
+        viewPersonnelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                viewPersonnelButtonActionPerformed(evt);
             }
         });
 
@@ -292,9 +289,9 @@ public class Window extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButton3)
+                                .addComponent(createPersonnelButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(viewPersonnelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(fNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -342,9 +339,9 @@ public class Window extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addContainerGap(41, Short.MAX_VALUE))
+                    .addComponent(createPersonnelButton)
+                    .addComponent(viewPersonnelButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -397,13 +394,13 @@ public class Window extends javax.swing.JFrame {
     private void searchInstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchInstButtonActionPerformed
         InstrumentSubType subType = (InstrumentSubType)subTypeBox.getSelectedItem();
         InstrumentType type = (InstrumentType)typeBox.getSelectedItem();        
-
-        Instrument[] instruments = Instrument.getArray(subType.getSubTypeId(),
-            type.getTypeId(), sNumTextField.getText(), makeTextField.getText(),
-            modelTextField.getText(), 0);
-        resultList.setListData(instruments);
-        if(instruments.length == 0)
-            JOptionPane.showMessageDialog(null, "No records found");
+        List<Instrument> instruments = Instrument.getList(subType.getSubTypeId(), 
+                type.getTypeId(), sNumTextField.getText(), makeTextField.getText(), 
+                modelTextField.getText(), 0);
+        iModel = new InstrumentTableModel(instruments);
+        resultsTable.setModel(iModel);
+        if(instruments.isEmpty())
+            JOptionPane.showMessageDialog(this, "No records found");
     }//GEN-LAST:event_searchInstButtonActionPerformed
 
     private DefaultComboBoxModel buildSubTypeModel(){     
@@ -419,6 +416,19 @@ public class Window extends javax.swing.JFrame {
         Object[] b = a.toArray();
         return new DefaultComboBoxModel(b);
     }
+    static String pad(String s, int length){
+        if(s.length() < length){
+            StringBuilder sb = new StringBuilder(s);
+            while(sb.length() < length){
+                sb.append(" ");
+            }
+            return sb.toString();
+        }else{
+            return s.substring(0, length);
+        }
+    }
+    
+    String s = pad("grodd", 20);
     private void modelTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modelTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_modelTextFieldActionPerformed
@@ -433,11 +443,11 @@ public class Window extends javax.swing.JFrame {
 
     private void viewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewButtonActionPerformed
         try{
-            Instrument instrument = (Instrument)resultList.getSelectedValue();
+            Instrument instrument = iModel.getSelectedItem(resultsTable.getSelectedRow());
             InstrumentMaintenance i = new InstrumentMaintenance(instrument);
             i.setVisible(true);
-        }catch(NullPointerException e){
-            JOptionPane.showMessageDialog(null, "No instrument record selected");
+        }catch(NullPointerException | IndexOutOfBoundsException e){
+            JOptionPane.showMessageDialog(this, "No instrument record selected");
         }
                      
     }//GEN-LAST:event_viewButtonActionPerformed
@@ -452,19 +462,19 @@ public class Window extends javax.swing.JFrame {
         Personnel[] resultSet = Personnel.getArray(p);
         personnelListField.setListData(resultSet);
         if(resultSet.length == 0)
-            JOptionPane.showMessageDialog(null, "No records found");
+            JOptionPane.showMessageDialog(this, "No records found");
     }//GEN-LAST:event_searchPersButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void createPersonnelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createPersonnelButtonActionPerformed
         PersonnelMaintenance p = new PersonnelMaintenance();
         p.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_createPersonnelButtonActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void viewPersonnelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPersonnelButtonActionPerformed
         Personnel person = (Personnel)personnelListField.getSelectedValue();
         PersonnelMaintenance p = new PersonnelMaintenance(person);
         p.setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_viewPersonnelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -503,12 +513,11 @@ public class Window extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createButton;
+    private javax.swing.JButton createPersonnelButton;
     private javax.swing.JTextField fNameField;
     private javax.swing.JLabel fNameLabel;
     private javax.swing.JTextField idField;
     private javax.swing.JLabel idLabel;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -518,8 +527,8 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField lNameField;
     private javax.swing.JTextField mNameField;
@@ -527,7 +536,7 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JTextField makeTextField;
     private javax.swing.JTextField modelTextField;
     private javax.swing.JList<Personnel> personnelListField;
-    private javax.swing.JList<Instrument> resultList;
+    private javax.swing.JTable resultsTable;
     private javax.swing.JLabel sNumLabel;
     private javax.swing.JTextField sNumTextField;
     private javax.swing.JButton searchInstButton;
@@ -539,5 +548,6 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JComboBox<InstrumentType> typeBox;
     private javax.swing.JLabel typeLabel;
     private javax.swing.JButton viewButton;
+    private javax.swing.JButton viewPersonnelButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,7 +13,6 @@ package dataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface DAOInterface<T>{
@@ -23,8 +22,8 @@ public interface DAOInterface<T>{
     boolean update(T t);
     boolean delete(T t);
     String dbURL = "jdbc:mysql://localhost:3306/bandmaster";
-    String USER = "XXXXX";
-    String PASS = "XXXXX";
+    String USER = "root";
+    String PASS = "08260";
     
     default Connection getConnection() throws SQLException{
         Connection connection = DriverManager.getConnection(dbURL, USER, PASS);
