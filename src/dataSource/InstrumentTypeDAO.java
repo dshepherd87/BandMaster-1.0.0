@@ -23,13 +23,13 @@ public class InstrumentTypeDAO implements DAOInterface<InstrumentType>{
      */
     @Override
     public List<InstrumentType> getAll(){
-        String sql = "SELECT instrumenttype_uid, description FROM instrumenttype ORDER BY description";
+        String sql = "SELECT instrumentType_uid, description FROM instrumentType ORDER BY description";
         List<InstrumentType> types = new ArrayList<>();
         try(Connection connection = getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()){
             while(rs.next()){
-                int typeId = rs.getInt("instrumenttype_uid");
+                int typeId = rs.getInt("instrumentType_uid");
                 String typeName = rs.getString("description");
                 InstrumentType i = new InstrumentType(typeId, typeName);
                 types.add(i);
@@ -49,7 +49,7 @@ public class InstrumentTypeDAO implements DAOInterface<InstrumentType>{
     @Override
     public InstrumentType getByUid(int typeId){
         String sql = "SELECT description FROM instrumentType " +
-                    "WHERE instrumenttype_uid = ?";
+                    "WHERE instrumentType_uid = ?";
         try(Connection connection = getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1, typeId);

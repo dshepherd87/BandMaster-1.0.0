@@ -27,7 +27,7 @@ public class PersonnelDAO implements DAOInterface<Personnel>{
      */
     @Override
     public Personnel getByUid(int personnelId){
-        String sql = "SELECT personnel_uid, realworld_id, firstName, "
+        String sql = "SELECT personnel_UID, realWorld_id, firstName, "
                 + "middleName, lastName, title "
                 + "FROM personnel "
                 + "ORDER BY lastName";     
@@ -60,7 +60,7 @@ public class PersonnelDAO implements DAOInterface<Personnel>{
  */    
     @Override
     public List<Personnel> getAll(){
-        String sql = "SELECT personnel_uid, realworld_id, firstName, "
+        String sql = "SELECT personnel_UID, realworld_id, firstName, "
                 + "middleName, lastName, title "
                 + "FROM personnel "
                 + "ORDER BY lastName";               
@@ -69,7 +69,7 @@ public class PersonnelDAO implements DAOInterface<Personnel>{
                 PreparedStatement ps = connection.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()){
             while(rs.next()){
-                int personnelId = rs.getInt("personnel_uid");
+                int personnelId = rs.getInt("personnel_UID");
                 String realWorldId = rs.getString("realWorld_id");
                 String firstName = rs.getString("firstName");
                 String middleName = rs.getString("middleName");
@@ -90,10 +90,10 @@ public class PersonnelDAO implements DAOInterface<Personnel>{
     }
     
     public List<Personnel> getMatchingList(Personnel p){
-        String sql = "SELECT personnel_uid, realworld_id, firstName, "
+        String sql = "SELECT personnel_UID, realworld_id, firstName, "
                 + "middleName, lastName, title "
                 + "FROM personnel "
-                + "WHERE (realworld_id = ? OR ? = '') "
+                + "WHERE (realWorld_id = ? OR ? = '') "
                 + "AND (firstName = ? OR ? = '') "
                 + "AND (middleName = ? OR ? = '') "
                 + "AND (lastName = ? OR ? = '') "
@@ -114,7 +114,7 @@ public class PersonnelDAO implements DAOInterface<Personnel>{
                 ps.setString(10, p.getTitle());
                 ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                int personnelId = rs.getInt("personnel_uid");
+                int personnelId = rs.getInt("personnel_UID");
                 String realWorldId = rs.getString("realWorld_id");
                 String firstName = rs.getString("firstName");
                 String middleName = rs.getString("middleName");
@@ -164,7 +164,7 @@ public class PersonnelDAO implements DAOInterface<Personnel>{
      */
     @Override
     public boolean delete(Personnel p){
-        String sql = "DELETE FROM personnel WHERE personnel_uid = ?;";
+        String sql = "DELETE FROM personnel WHERE personnel_UID = ?;";
         try(Connection connection = getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1, p.getPersonnelId());

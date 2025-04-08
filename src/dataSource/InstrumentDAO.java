@@ -27,7 +27,7 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
     @Override
     public Instrument getByUid(int instrumentId){
         String sql = "SELECT subType_UID, s.description, type_UID, t.description, " 
-                +    "serialnumber, make, model, personnel_UID "
+                +    "serialnumber, manufacturer, model, personnel_UID "
                 +    "FROM instrument "
                 +    "JOIN instrumentSubType AS s ON instrumentSubType_UID = subType_UID "
                 +    "JOIN instrumentType AS t ON instrumentType_UID = type_UID "
@@ -42,10 +42,10 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
                 InstrumentType type = new InstrumentType(rs.getInt("type_UID"),
                         rs.getString("description"));
                 String serialNumber = rs.getString("serialnumber");
-                String make = rs.getString("make");
+                String manufacturer = rs.getString("manufacturer");
                 String model = rs.getString("model");
                 int personnelId = rs.getInt("personnel_UID");
-                Instrument i = new Instrument(instrumentId, subType, type, serialNumber, make, model, personnelId);
+                Instrument i = new Instrument(instrumentId, subType, type, serialNumber, manufacturer, model, personnelId);
                 rs.close();
                 return i;
             }else{
@@ -64,7 +64,7 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
     @Override
     public List<Instrument> getAll(){
         String sql = "SELECT instrument_UID, subType_UID, s.description, type_UID, "
-                +    "t.description, serialnumber, make, model, personnel_UID "
+                +    "t.description, serialnumber, manufacturer, model, personnel_UID "
                 +    "FROM instrument "
                 +    "JOIN instrumentSubType AS s ON instrumentSubType_UID = subType_UID "
                 +    "JOIN instrumentType AS t ON instrumentType_UID = type_UID "
@@ -80,12 +80,12 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
                 InstrumentType type = new InstrumentType(rs.getInt("type_UID"),
                         rs.getString("description"));
                 String serialNumber = rs.getString("serialnumber");
-                String make = rs.getString("make");
+                String manufacturer = rs.getString("manufacturer");
                 String model = rs.getString("model");
                 int personnelId = rs.getInt("personnel_UID");
                 
                 Instrument i = new Instrument(instrumentId, subType, type, 
-                        serialNumber, make, model, personnelId);
+                        serialNumber, manufacturer, model, personnelId);
                 instruments.add(i);
             }
             rs.close();
@@ -102,22 +102,22 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
      * @param subTypeId
      * @param typeId
      * @param serialNumberIn
-     * @param makeIn
+     * @param manufacturerIn
      * @param modelIn
      * @param personnelIdIn
      * @return 
      */
     public List<Instrument> getByValue(int subTypeId, int typeId, String serialNumberIn,
-            String makeIn, String modelIn, int personnelIdIn){
+            String manufacturerIn, String modelIn, int personnelIdIn){
         String sql = "SELECT instrument_uid, subtype_uid, instrumentSubType.description, "
-                + "type_uid, instrumentType.description, serialNumber, make, model, personnel_uid "
+                + "type_uid, instrumentType.description, serialNumber, manufacturer, model, personnel_uid "
                 + "FROM instrument "
                 + "JOIN instrumentSubType ON instrumentSubType_uid = subType_uid "
                 + "JOIN instrumentType ON instrumentType_uid = type_uid "
                 + "WHERE (subType_uid = ? OR ? = 0) "
                 + "AND (type_uid = ? OR ? = 0) "
                 + "AND (serialNumber = ? OR ? = '') "
-                + "AND (make = ? OR ? = '') "
+                + "AND (manufacturer = ? OR ? = '') "
                 + "AND (model = ? OR ? = '') "
                 + "AND (personnel_uid = ? OR ? = 0)"
                 + "ORDER BY instrumentType.description";
@@ -130,8 +130,8 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
                                 ps.setInt(4, typeId);
 				ps.setString(5, serialNumberIn);
                                 ps.setString(6, serialNumberIn);
-				ps.setString(7, makeIn);
-                                ps.setString(8, makeIn);
+				ps.setString(7, manufacturerIn);
+                                ps.setString(8, manufacturerIn);
 				ps.setString(9, modelIn);
                                 ps.setString(10, modelIn);
 				ps.setInt(11, personnelIdIn);
@@ -144,12 +144,12 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
                 InstrumentType type = new InstrumentType(
                         rs.getInt("type_UID"), rs.getString("instrumenttype.description"));
                 String serialNumber = rs.getString("serialnumber");
-                String makeOut = rs.getString("make");
+                String manufacturerOut = rs.getString("manufacturer");
                 String modelOut = rs.getString("model");
                 int personnelId = rs.getInt("personnel_UID");
                 
                 Instrument i = new Instrument(instrumentId, subType, type,
-                serialNumber, makeOut, modelOut, personnelId);
+                serialNumber, manufacturerOut, modelOut, personnelId);
                 instruments.add(i);
             }
             rs.close();
@@ -169,14 +169,14 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
     @Override
     public boolean add(Instrument instrument){
         String sql = "INSERT INTO instrument(subtype_uid, type_uid, "
-                + "serialNumber, make, model, personnel_UID) " 
+                + "serialNumber, manufacturer, model, personnel_UID) " 
                 + "VALUES (?, ?, ?, ?, ?, ?)"; 
         try(Connection connection = getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1, instrument.getSubType().getSubTypeId());
             ps.setInt(2, instrument.getType().getTypeId());
             ps.setString(3, instrument.getSerialNumber());
-            ps.setString(4, instrument.getMake());
+            ps.setString(4, instrument.getmanufacturer());
             ps.setString(5, instrument.getModel());
             if(instrument.getPersonnelId() == 0)
                 ps.setString(6, null);
@@ -219,7 +219,7 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
                 + "subType_UID = ?, "
                 + "type_UID = ?, "
                 + "serialNumber = ?, "
-                + "make =  ?, "
+                + "manufacturer =  ?, "
                 + "model = ?, "
                 + "personnel_UID = ? "
                 + "WHERE instrument_UID = ?"; 
@@ -228,7 +228,7 @@ public class InstrumentDAO implements DAOInterface<Instrument>{
             ps.setInt(1, i.getSubType().getSubTypeId());
             ps.setInt(2, i.getType().getTypeId());
             ps.setString(3, i.getSerialNumber());
-            ps.setString(4, i.getMake());
+            ps.setString(4, i.getmanufacturer());
             ps.setString(5, i.getModel());
             if(i.getPersonnelId() == 0)
                 ps.setString(6, null);

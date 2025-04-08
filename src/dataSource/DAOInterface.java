@@ -21,12 +21,14 @@ public interface DAOInterface<T>{
     boolean add(T t);
     boolean update(T t);
     boolean delete(T t);
-    String dbURL = "jdbc:mysql://localhost:3306/bandmaster";
+    /*String dbURL = "jdbc:mysql://localhost:3306/bandmaster";
     String USER = "root";
-    String PASS = "08260";
+    String PASS = "08260";*/
+    String url = "jdbc:sqlite:data/bandmaster.db";
     
     default Connection getConnection() throws SQLException{
-        Connection connection = DriverManager.getConnection(dbURL, USER, PASS);
+        //Connection connection = DriverManager.getConnection(dbURL, USER, PASS);
+        Connection connection = DriverManager.getConnection(url);
         return connection;
     }
 }

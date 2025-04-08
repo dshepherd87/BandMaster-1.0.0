@@ -22,13 +22,13 @@ public class InstrumentSubTypeDAO implements DAOInterface<InstrumentSubType>{
      */
     @Override
     public List<InstrumentSubType> getAll(){
-        String sql = "SELECT instrumentsubtype_uid, description FROM instrumentsubtype";
+        String sql = "SELECT instrumentSubType_UID, description FROM instrumentSubType";
         List<InstrumentSubType> subTypes = new ArrayList<>();
         try(Connection connection = getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()){
             while(rs.next()){
-                int subTypeId = rs.getInt("instrumentsubtype_uid");
+                int subTypeId = rs.getInt("instrumentSubType_UID");
                 String subTypeName = rs.getString("description");
                 InstrumentSubType s = new InstrumentSubType(subTypeId, subTypeName);
                 subTypes.add(s);
